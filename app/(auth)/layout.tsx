@@ -1,11 +1,11 @@
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+import React from 'react'
+import AuthForm from '@/components/AuthForm'
+const SignUp = () => {
   return (
-    <main>
-    {children}
-    </main>
-  );
+    <section className='flex-center size-full max-sm:px-6'>
+      <AuthForm  type="sign-up"/>
+    </section >
+  )
 }
+
+export default SignUp
