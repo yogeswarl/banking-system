@@ -1,11 +1,24 @@
-import React from 'react'
-import AuthForm from '@/components/AuthForm'
-const SignUp = () => {
-  return (
-    <section className='flex-center size-full max-sm:px-6'>
-      <AuthForm  type="sign-up"/>
-    </section >
-  )
-}
+import Image from "next/image";
 
-export default SignUp
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <main className="flex min-h-screen w-full justify-between font-inter">
+      {children}
+      <div className="auth-asset">
+        <div>
+          <Image 
+            src="/icons/auth-image.svg"
+            alt="Auth image"
+            width={500}
+            height={500}
+            className="rounded-l-xl object-contain"
+          />
+        </div>
+      </div>
+    </main>
+  );
+}
