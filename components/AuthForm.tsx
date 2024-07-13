@@ -11,13 +11,18 @@ import {Input} from '@/components/ui/input';
 import CustomInput from './CustomInput';
 import { authformSchema } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
-
+import { sign } from 'crypto';
+import { useRouter } from 'next/navigation';
+import { getLoggedInUser, signIn, signUp } from '@/lib/actions/user.action';
 const formSchema = z.object({
   email: z.string().email(),
 })
 const AuthForm = ({type}:{type:string}) => {
+
+  const router = useRouter()
   const [user, setUser] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+
   const formSchema = authformSchema(type)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -27,11 +32,30 @@ const AuthForm = ({type}:{type:string}) => {
     }
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = async (values: z.infer<typeof formSchema>) =>{
     setIsLoading(true);
-    console.log(values)
-    setIsLoading(false);
+    try{
+      if(type==='sign-up'){
+        const newUser = await signUp(values)
+        setUser(newUser)
+      }
+
+      if(type==='sign-in'){
+        // const response = await SignIn({
+        //   email: values.email,
+        //   password: values.password
+        // })
+        // if(response) router.push('/')
+      }
+    }
+    catch(error){
+      console.log(error)
+    }
+    finally{
+      setIsLoading(false);
+    }
   }
+    
 
   return (
     <section className="auth-form">
@@ -64,6 +88,7 @@ const AuthForm = ({type}:{type:string}) => {
                   <CustomInput control={form.control} name='lastName' label='Last Name' placeholder='Enter your last name' />
                 </div>
                 <CustomInput control={form.control} name='address1' label='Address' placeholder='Enter your specific address' />
+                <CustomInput control={form.control} name='city' label='City' placeholder='Enter your City' />
                 <div className='flex gap-4'>
                   <CustomInput control={form.control} name='state' label='State' placeholder='Ex: NY' />
                   <CustomInput control={form.control} name='postalCode' label='Postal Code' placeholder='Ex: 11101' />
