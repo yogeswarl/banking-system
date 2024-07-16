@@ -104,7 +104,7 @@ export const createLinkToken = async (user: User) => {
       user: {
         client_user_id : user.$id,
       },
-      client_name: user.name,
+      client_name: `${user.firstName} ${user.lastName}`,
       products:  ['auth'] as Products[], 
       language: 'en',
       country_codes: ['US'] as CountryCode[],
@@ -132,7 +132,7 @@ try {
     BANK_COLLECTION_ID!, 
     ID.unique(),
     {
-      userId,
+      userid: userId,
       bankId,
       accountId,
       accessToken,

@@ -1,7 +1,6 @@
 import React, { useCallback,useEffect, useState } from 'react'
 import { Button } from './ui/button'
 import { PlaidLinkOnSuccess, PlaidLinkOptions, usePlaidLink } from 'react-plaid-link'
-import { StyledString } from 'next/dist/build/swc'
 import { useRouter } from 'next/navigation'
 import { createLinkToken, exchangePublicToken } from '@/lib/actions/user.action'
 const PlaidLink = ({user,variant}: PlaidLinkProps) => {
@@ -29,7 +28,7 @@ const PlaidLink = ({user,variant}: PlaidLinkProps) => {
   return (
     <>
     {variant==='primary' ? (
-      <Button className='plaidlink_primary' onClick={() =>open()} disabled={!ready}>
+      <Button className='plaidlink-primary' onClick={() =>open()} disabled={!ready}>
         Connect Bank
       </Button>
     ): variant=== 'ghost' ? (
