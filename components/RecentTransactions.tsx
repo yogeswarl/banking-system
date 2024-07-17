@@ -11,7 +11,7 @@ const RecentTransactions = ({ accounts, page = 1, transactions = [], appwriteIte
       <header className='flex items-center justify-between'>
         <h2 className="recent-transactions-label">Recent Transactions</h2>
         <Link href={`/transaction-history/?id=${appwriteItemId}`}
-        className='view-all-btn'>View All </Link>
+        className='view-all-btn'>View All</Link>
       </header>
 
       <Tabs defaultValue={appwriteItemId} className="w-full">
