@@ -2,10 +2,22 @@ import React from 'react'
 import HeaderBox from '@/components/HeaderBox'
 import TotalBalanceBox from '@/components/TotalBalanceBox'
 import RightSideBar from '@/components/RightSideBar'
-import { getLoggedInUser } from '@/lib/actions/user.action'
+import { getLoggedInUser } from '@/lib/actions/user.actions'
+import { getAccounts,getAccount } from '@/lib/actions/bank.actions'
+import RecentTransactions from '@/components/RecentTransactions'
 
-const Home = async () => {
+const Home = async ({searchParams: {id,page}}: SearchParamProps) => {
+  const currentPage = Number(page as string) || 1;
   const loggedIn = await getLoggedInUser()
+  const accounts = await getAccounts({userId: loggedIn.$id})
+
+  if(!accounts) return;
+
+  const accountsData = accounts?.data;
+  const appwriteItemId = (id as string) || accountsData[0]?.appwriteItemId
+
+
+  const account = await getAccount({appwriteItemId})
   return (
     <section className="home">
       <div className="home-content">
@@ -13,18 +25,18 @@ const Home = async () => {
           <HeaderBox 
           type="greeting"
           title="Welcome"
-          user={loggedIn?.name || 'Guest'}
+          user={loggedIn?.firstName || 'Guest'}
           subtext="Access and manage your account and transaction Efficiently." 
           />
           <TotalBalanceBox 
-              accounts={[]}
-              totalBanks={1}
-              totalCurrentBalance={1250.75}
+              accounts={accountsData}
+              totalBanks={accounts?.totalBanks}
+              totalCurrentBalance={accounts?.totalCurrentBalance}
           />
         </header>
-        RECENT TRANSACTION
+        <RecentTransactions appwriteItemId={appwriteItemId} accounts={accountsData} transactions={account?.transactions} page={currentPage} />
       </div>
-      <RightSideBar user={loggedIn} transactions={[]} banks={[{currentBalance: 123.50},{currentBalance: 500}]} />
+      <RightSideBar user={loggedIn} transactions={account?.transactions} banks={accountsData?.slice(0,2)} />
     </section>
   )
 }
